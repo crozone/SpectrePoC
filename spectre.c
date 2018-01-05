@@ -145,7 +145,7 @@ int main(int argc,
     readMemoryByte(malicious_x++, value, score);
     printf("%s: ", (score[0] >= 2 * score[1] ? "Success" : "Unclear"));
     printf("0x%02X=’%c’ score=%d ", value[0],
-      (value[0] > 31 && value[0] < 127 ? value[0] : "?"), score[0]);
+      (value[0] > 31 && value[0] < 127 ? value[0] : '?'), score[0]);
     if (score[1] > 0)
       printf("(second best: 0x%02X score=%d)", value[1], score[1]);
     printf("\n");
