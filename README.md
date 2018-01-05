@@ -10,6 +10,8 @@ https://spectreattack.com/spectre.pdf
 
 The source code in this repository was conveniently provided by Erik August's gist, found here: https://gist.github.com/ErikAugust/724d4a969fb2c6ae1bbd7b2a9e3d4bb6
 
+The code has been minimally modified to fix build issues and improve comments where possible.
+
 ## Building
 
 The project can be built with GNU Make and GCC.
@@ -34,10 +36,10 @@ If desired, a custom target address and length can be given as the first and sec
 
 ## Tweaking
 
-If you're getting lackluster results, you may need to tweak the `CACHE_HIT_THRESHOLD`. This can be done by chaing the line
+If you're getting lackluster results, you may need to tweak the `CACHE_HIT_THRESHOLD`. This can be done by changing the line
 `#define CACHE_HIT_THRESHOLD (80)`.
 
-While a value of 80 appears to work for most desktop CPUs, a larger value may be required for slower CPUs. For example, on my AMD GX-412TC SOC, I required a value of 300 to get a good result.
+While a value of 80 appears to work for most desktop CPUs, a larger value may be required for slower CPUs. For example, on a AMD GX-412TC SOC, a value of 300 was required to get a good result.
 
 ## Example output
 
