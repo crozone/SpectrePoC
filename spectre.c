@@ -56,7 +56,7 @@ void victim_function(size_t x) {
 /********************************************************************
 Analysis code
 ********************************************************************/
-#define CACHE_HIT_THRESHOLD(80) /* assume cache hit if time <= threshold */
+#define CACHE_HIT_THRESHOLD (80) /* assume cache hit if time <= threshold */
 
 /* Report best guess in value[0] and runner-up in value[1] */
 void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
