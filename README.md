@@ -4,7 +4,11 @@ Proof of concept code for the Spectre CPU exploit.
 
 ## Attribution
 
-The original source code was taken from Erik August's gist, found here: https://gist.github.com/ErikAugust/724d4a969fb2c6ae1bbd7b2a9e3d4bb6
+The source code originates from the example code provided in the "Spectre Attacks: Exploiting Speculative Execution" paper found here:
+
+https://spectreattack.com/spectre.pdf
+
+The source code in this repository was conveniently provided by Erik August's gist, found here: https://gist.github.com/ErikAugust/724d4a969fb2c6ae1bbd7b2a9e3d4bb6
 
 ## Building
 
