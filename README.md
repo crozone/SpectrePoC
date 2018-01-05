@@ -22,15 +22,22 @@ The output binary is `./spectre.out`.
 
 If you want to build it manually, make sure to disable all optimisations (aka, don't use -O2), as it will break the program.
 
-##Executing
+## Executing
 
 To run specter with the example secret string "The Magic Words are Squeamish Ossifrage." as the target, simply run `./spectre.out` with no command line arguments.
 
 If desired, a custom target address and length can be given as the first and second command line arguments, respectively.
 
+## Tweaking
+
+If you're getting lackluster results, you may need to tweak the `CACHE_HIT_THRESHOLD`. This can be done by chaing the line
+`#define CACHE_HIT_THRESHOLD (80)`.
+
+While a value of 80 appears to work for most desktop CPUs, a larger value may be required for slower CPUs. For example, on my AMD GX-412TC SOC, I required a value of 300 to get a good result.
+
 ## Example output
 
-The following was output on an AMD GX-412TC SOC.
+The following was output on an AMD GX-412TC SOC, with a `CACHE_HIT_THRESHOLD` of 300:
 
 `./spectre.out:`
 
