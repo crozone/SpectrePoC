@@ -2,8 +2,12 @@
 *
 * Spectre PoC
 *
-* Original code sourced from from Erik August's gist, found here:
-* https://gist.github.com/ErikAugust/724d4a969fb2c6ae1bbd7b2a9e3d4bb6
+* This source code originates from the example code provided in the 
+* "Spectre Attacks: Exploiting Speculative Execution" paper found at
+* https://spectreattack.com/spectre.pdf
+*
+* Minor modifications have been made to fix compilation errors and
+* improve documentation where possible.
 *
 **********************************************************************/
 
