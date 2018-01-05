@@ -87,4 +87,4 @@ Reading at malicious_x = 0xffffffffffdfed9f... Unclear: 0x2E=’.’ score=995 (
 
 ## Contributing
 
-Feel free to add your results to the "Results" issue. Include your OS details, CPU details like vendor Id, family, model name, stepping, microcode, Mhz, and cache size. These can be found by running `uname -a` and `cat /proc/cpuinfo`.
+Feel free to add your results to the "Results" issue. Include your `CACHE_HIT_THRESHOLD`, OS details, CPU details like vendor Id, family, model name, stepping, microcode, Mhz, and cache size. These can be found by running `uname -a` and `cat /proc/cpuinfo`.
