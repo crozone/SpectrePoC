@@ -26,6 +26,10 @@ Building is as easy as:
 
 The output binary is `./spectre.out`.
 
+If the target CPU doesn't support the "rdtscp" instruction then the macro "NORDTSCP" must be defined.
+
+`CFLAGS=-DNORDTSCP make`
+
 If you want to build it manually, make sure to disable all optimisations (aka, don't use -O2), as it will break the program.
 
 ## Executing
