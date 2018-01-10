@@ -15,10 +15,10 @@
 #include <stdlib.h>
 #include <stdint.h>
 #ifdef _MSC_VER
-#include <intrin.h> /* for rdtscp and clflush */
+#include <intrin.h> /* for rdtsc, rdtscp, clflush */
 #pragma optimize("gt",on)
 #else
-#include <x86intrin.h> /* for rdtscp and clflush */
+#include <x86intrin.h> /* for rdtsc, rdtscp, clflush */
 #endif
 
 /********************************************************************
@@ -174,7 +174,18 @@ int main(int argc,
     sscanf(argv[3], "%d", &len);
   }
   
+  /* Print cache hit threshold */
   printf("Using a cache hit threshold of %d.\n", cache_hit_threshold);
+  
+  /* Print build configuration */
+  printf("Build: ");
+  #ifndef NORDTSCP
+    printf("RDTSCP_SUPPORTED ");
+  #else
+    printf("RDTSCP_NOT_SUPPORTED ");
+  #endif
+  printf("\n");
+
   printf("Reading %d bytes:\n", len);
 
   /* Start the read loop to read each address */
