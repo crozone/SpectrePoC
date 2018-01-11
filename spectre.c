@@ -63,7 +63,7 @@ Analysis code
 #ifdef NOCLFLUSH
 #define CACHE_FLUSH_ITERATIONS 2048
 #define CACHE_FLUSH_STRIDE 4096
-int cache_flush_array[CACHE_FLUSH_STRIDE * CACHE_FLUSH_ITERATIONS];
+uint8_t cache_flush_array[CACHE_FLUSH_STRIDE * CACHE_FLUSH_ITERATIONS];
 #endif
 
 /* Report best guess in value[0] and runner-up in value[1] */
@@ -175,6 +175,12 @@ int main(int argc,
   uint8_t value[2];
   int i;
 
+  #ifdef NOCLFLUSH
+  for (i = 0; i < sizeof(cache_flush_array); i++) {
+    cache_flush_array[i] = 1;
+  }
+  #endif
+  
   for (i = 0; i < sizeof(array2); i++) {
     array2[i] = 1; /* write to array2 so in RAM not copy-on-write zero pages */
   }
