@@ -232,7 +232,8 @@ int main(int argc,
       (value[0] > 31 && value[0] < 127 ? value[0] : '?'), score[0]);
     
     if (score[1] > 0) {
-      printf("(second best: 0x%02X score=%d)", value[1], score[1]);
+      printf("(second best: 0x%02X=’%c’ score=%d)", value[1],
+      (value[1] > 31 && value[1] < 127 ? value[1] : '?'), score[1]);
     }
 
     printf("\n");
