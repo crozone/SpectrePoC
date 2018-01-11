@@ -8,9 +8,9 @@ The source code originates from the example code provided in the "Spectre Attack
 
 https://spectreattack.com/spectre.pdf
 
-The source code in this repository was conveniently provided by Erik August's gist, found here: https://gist.github.com/ErikAugust/724d4a969fb2c6ae1bbd7b2a9e3d4bb6
+The original source code used in this repository was conveniently provided by Erik August's gist, found here: https://gist.github.com/ErikAugust/724d4a969fb2c6ae1bbd7b2a9e3d4bb6
 
-The code has been minimally modified to fix build issues and improve comments where possible.
+The code has been modified to fix build issues, add workaround for older CPUs, and improve comments where possible.
 
 ## Building
 
@@ -26,9 +26,21 @@ Building is as easy as:
 
 The output binary is `./spectre.out`.
 
-If the target CPU doesn't support the "rdtscp" instruction then the macro "NORDTSCP" must be defined.
+### Building for older CPUs
+
+If the target CPU doesn't support the "rdtscp" instruction, then the macro "NORDTSCP" must be defined.
+
+Build the project with the NORDTSCP cflag:
 
 `CFLAGS=-DNORDTSCP make`
+
+If the target CPU doesn't support the "clflush" instruction, then the macro "NOCLFLUSH" must be defined.
+
+Build the project with the NOCLFLUSH cflag:
+
+`CFLAGS=-DNOCLFLUSH make`
+
+### Building it without using the Makefile
 
 If you want to build it manually, make sure to disable all optimisations (aka, don't use -O2), as it will break the program.
 
@@ -64,45 +76,46 @@ The following was output on an AMD GX-412TC SOC, with a cache hit threshold of 1
 
 ```
 Using a cache hit threshold of 100.
+Build: RDTSCP_SUPPORTED CLFLUSH_SUPPORTED
 Reading 40 bytes:
-Reading at malicious_x = 0xffffffffffdfedc8... Success: 0x54=’T’ score=2
-Reading at malicious_x = 0xffffffffffdfedc9... Success: 0x68=’h’ score=2
-Reading at malicious_x = 0xffffffffffdfedca... Success: 0x65=’e’ score=2
-Reading at malicious_x = 0xffffffffffdfedcb... Success: 0x20=’ ’ score=2
-Reading at malicious_x = 0xffffffffffdfedcc... Success: 0x4D=’M’ score=2
-Reading at malicious_x = 0xffffffffffdfedcd... Success: 0x61=’a’ score=2
-Reading at malicious_x = 0xffffffffffdfedce... Success: 0x67=’g’ score=2
-Reading at malicious_x = 0xffffffffffdfedcf... Success: 0x69=’i’ score=2
-Reading at malicious_x = 0xffffffffffdfedd0... Success: 0x63=’c’ score=2
-Reading at malicious_x = 0xffffffffffdfedd1... Success: 0x20=’ ’ score=2
-Reading at malicious_x = 0xffffffffffdfedd2... Success: 0x57=’W’ score=2
-Reading at malicious_x = 0xffffffffffdfedd3... Success: 0x6F=’o’ score=2
-Reading at malicious_x = 0xffffffffffdfedd4... Success: 0x72=’r’ score=2
-Reading at malicious_x = 0xffffffffffdfedd5... Success: 0x64=’d’ score=2
-Reading at malicious_x = 0xffffffffffdfedd6... Success: 0x73=’s’ score=2
-Reading at malicious_x = 0xffffffffffdfedd7... Success: 0x20=’ ’ score=2
-Reading at malicious_x = 0xffffffffffdfedd8... Success: 0x61=’a’ score=2
-Reading at malicious_x = 0xffffffffffdfedd9... Success: 0x72=’r’ score=2
-Reading at malicious_x = 0xffffffffffdfedda... Success: 0x65=’e’ score=2
-Reading at malicious_x = 0xffffffffffdfeddb... Success: 0x20=’ ’ score=2
-Reading at malicious_x = 0xffffffffffdfeddc... Success: 0x53=’S’ score=2
-Reading at malicious_x = 0xffffffffffdfeddd... Success: 0x71=’q’ score=2
-Reading at malicious_x = 0xffffffffffdfedde... Success: 0x75=’u’ score=2
-Reading at malicious_x = 0xffffffffffdfeddf... Success: 0x65=’e’ score=2
-Reading at malicious_x = 0xffffffffffdfede0... Success: 0x61=’a’ score=2
-Reading at malicious_x = 0xffffffffffdfede1... Success: 0x6D=’m’ score=2
-Reading at malicious_x = 0xffffffffffdfede2... Success: 0x69=’i’ score=2
-Reading at malicious_x = 0xffffffffffdfede3... Success: 0x73=’s’ score=2
-Reading at malicious_x = 0xffffffffffdfede4... Success: 0x68=’h’ score=2
-Reading at malicious_x = 0xffffffffffdfede5... Success: 0x20=’ ’ score=2
-Reading at malicious_x = 0xffffffffffdfede6... Success: 0x4F=’O’ score=2
-Reading at malicious_x = 0xffffffffffdfede7... Success: 0x73=’s’ score=2
-Reading at malicious_x = 0xffffffffffdfede8... Success: 0x73=’s’ score=2
-Reading at malicious_x = 0xffffffffffdfede9... Success: 0x69=’i’ score=2
-Reading at malicious_x = 0xffffffffffdfedea... Success: 0x66=’f’ score=2
-Reading at malicious_x = 0xffffffffffdfedeb... Success: 0x72=’r’ score=2
-Reading at malicious_x = 0xffffffffffdfedec... Success: 0x61=’a’ score=2
-Reading at malicious_x = 0xffffffffffdfeded... Success: 0x67=’g’ score=2
-Reading at malicious_x = 0xffffffffffdfedee... Success: 0x65=’e’ score=2
-Reading at malicious_x = 0xffffffffffdfedef... Success: 0x2E=’.’ score=2
+Reading at malicious_x = 0xffffffffffdfedf8... Success: 0x54=’T’ score=2
+Reading at malicious_x = 0xffffffffffdfedf9... Success: 0x68=’h’ score=2
+Reading at malicious_x = 0xffffffffffdfedfa... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfedfb... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfedfc... Success: 0x4D=’M’ score=2
+Reading at malicious_x = 0xffffffffffdfedfd... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfedfe... Success: 0x67=’g’ score=2
+Reading at malicious_x = 0xffffffffffdfedff... Success: 0x69=’i’ score=2
+Reading at malicious_x = 0xffffffffffdfee00... Success: 0x63=’c’ score=2
+Reading at malicious_x = 0xffffffffffdfee01... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfee02... Success: 0x57=’W’ score=2
+Reading at malicious_x = 0xffffffffffdfee03... Success: 0x6F=’o’ score=2
+Reading at malicious_x = 0xffffffffffdfee04... Success: 0x72=’r’ score=2
+Reading at malicious_x = 0xffffffffffdfee05... Success: 0x64=’d’ score=2
+Reading at malicious_x = 0xffffffffffdfee06... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfee07... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfee08... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfee09... Success: 0x72=’r’ score=2
+Reading at malicious_x = 0xffffffffffdfee0a... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfee0b... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfee0c... Success: 0x53=’S’ score=2
+Reading at malicious_x = 0xffffffffffdfee0d... Success: 0x71=’q’ score=2
+Reading at malicious_x = 0xffffffffffdfee0e... Success: 0x75=’u’ score=2
+Reading at malicious_x = 0xffffffffffdfee0f... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfee10... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfee11... Success: 0x6D=’m’ score=2
+Reading at malicious_x = 0xffffffffffdfee12... Success: 0x69=’i’ score=2
+Reading at malicious_x = 0xffffffffffdfee13... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfee14... Success: 0x68=’h’ score=2
+Reading at malicious_x = 0xffffffffffdfee15... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfee16... Success: 0x4F=’O’ score=2
+Reading at malicious_x = 0xffffffffffdfee17... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfee18... Success: 0x73=’s’ score=2
+Reading at malicious_x = 0xffffffffffdfee19... Success: 0x69=’i’ score=2
+Reading at malicious_x = 0xffffffffffdfee1a... Success: 0x66=’f’ score=2
+Reading at malicious_x = 0xffffffffffdfee1b... Success: 0x72=’r’ score=2
+Reading at malicious_x = 0xffffffffffdfee1c... Success: 0x61=’a’ score=2
+Reading at malicious_x = 0xffffffffffdfee1d... Success: 0x67=’g’ score=2
+Reading at malicious_x = 0xffffffffffdfee1e... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfee1f... Success: 0x2E=’.’ score=2
 ```
