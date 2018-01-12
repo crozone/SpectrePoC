@@ -201,6 +201,11 @@ int main(int argc,
 
     sscanf(argv[3], "%d", &len);
   }
+
+  /* Print git commit hash */
+  #ifdef GIT_COMMIT_HASH
+    printf("Version: commit " GIT_COMMIT_HASH "\n");
+  #endif
   
   /* Print cache hit threshold */
   printf("Using a cache hit threshold of %d.\n", cache_hit_threshold);
