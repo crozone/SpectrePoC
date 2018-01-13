@@ -87,7 +87,7 @@ While a value of 80 appears to work for most desktop CPUs, a larger value may be
 
 ## Contributing
 
-Feel free to add your results to the "Results" issue. Include your cache hit threshold, OS details, CPU details like vendor Id, family, model name, stepping, microcode, Mhz, and cache size. These can be found by running `uname -a` and `cat /proc/cpuinfo`.
+Feel free to add your results to the "Results" issue. Include your cache hit threshold, OS details, CPU details like vendor Id, family, model name, stepping, microcode, MHz, and cache size. The OS can be found by running `uname -a`. CPU info can be found by running `cat /proc/cpuinfo` on Linux, and `sysctl -a | grep machdep.cpu` on OSX.
 
 ## Example output
 
