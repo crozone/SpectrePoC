@@ -258,6 +258,11 @@ int main(int argc,
   #else
     printf("RDTSCP_NOT_SUPPORTED ");
   #endif
+  #ifndef NOMFENCE
+    printf("MFENCE_SUPPORTED ");
+  #else
+    printf("MFENCE_NOT_SUPPORTED");
+  #endif
   #ifndef NOCLFLUSH
     printf("CLFLUSH_SUPPORTED ");
   #else
