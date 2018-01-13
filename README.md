@@ -28,17 +28,38 @@ The output binary is `./spectre.out`.
 
 ### Building for older CPUs
 
-If the target CPU doesn't support the "rdtscp" instruction, then the macro "NORDTSCP" must be defined.
+Depending on the CPU, certain instructions will need to be disabled in order for the program to run correctly.
 
-Build the project with the NORDTSCP cflag:
+The instructions in question are:
 
-`CFLAGS=-DNORDTSCP make`
+#### rdtscp:
 
-If the target CPU doesn't support the "clflush" instruction, then the macro "NOCLFLUSH" must be defined.
+Introduced with x86-64.
+All 32-bit only CPUs, including many Core 2 Duos, will need to disable this instruction.
 
-Build the project with the NOCLFLUSH cflag:
+To build the project without `rdtscp`, define the NORDTSCP cflag:
+
+`CFLAGS=-DNORDTSCP make` 
+
+#### mfence:
+Introduced with SSE2.
+Most CPUs pre-Pentium 4 will need to disable this instruction.
+
+To build the project without `mfence`, define the NOMFENCE cflag:
+
+`CFLAGS=-DNOMFENCE make`
+
+#### clflush
+Introduced with SSE2.
+Most CPUs pre-Pentium 4 will need to disable this instruction.
+
+To build the project without `clflush`, define the NOCLFLUSH cflag:
 
 `CFLAGS=-DNOCLFLUSH make`
+
+To define multiple cflags, separate each cflag with an escaped space. For example:
+
+`CFLAGS=-DNORDTSCP\ DNOMFENCE\ DNOCLFLUSH make`
 
 ### Building it without using the Makefile
 
