@@ -59,7 +59,7 @@ To build the project without `clflush`, define the NOCLFLUSH cflag:
 
 To define multiple cflags, separate each cflag with an escaped space. For example:
 
-`CFLAGS=-DNORDTSCP\ DNOMFENCE\ DNOCLFLUSH make`
+`CFLAGS=-DNORDTSCP\ -DNOMFENCE\ -DNOCLFLUSH make`
 
 ### Building it without using the Makefile
 
