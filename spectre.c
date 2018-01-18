@@ -284,7 +284,7 @@ int main(int argc,
   #ifndef NOMFENCE
     printf("MFENCE_SUPPORTED ");
   #else
-    printf("MFENCE_NOT_SUPPORTED");
+    printf("MFENCE_NOT_SUPPORTED ");
   #endif
   #ifndef NOCLFLUSH
     printf("CLFLUSH_SUPPORTED ");
