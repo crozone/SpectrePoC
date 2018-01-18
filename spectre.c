@@ -57,7 +57,15 @@ void victim_function(size_t x) {
   }
 }
 
+
+/********************************************************************
+Analysis code
+********************************************************************/
 #ifdef NOCLFLUSH
+#define CACHE_FLUSH_ITERATIONS 2048
+#define CACHE_FLUSH_STRIDE 4096
+uint8_t cache_flush_array[CACHE_FLUSH_STRIDE * CACHE_FLUSH_ITERATIONS];
+
 /* Flush memory using long SSE instructions */
 void flush_memory_sse(uint8_t * addr)
 {
@@ -71,15 +79,6 @@ void flush_memory_sse(uint8_t * addr)
     for (l = 0; l < 4; l++)
       _mm_stream_ps(&p[(l * 4 + k) * 4], i);
 }
-#endif
-
-/********************************************************************
-Analysis code
-********************************************************************/
-#ifdef NOCLFLUSH
-#define CACHE_FLUSH_ITERATIONS 2048
-#define CACHE_FLUSH_STRIDE 4096
-uint8_t cache_flush_array[CACHE_FLUSH_STRIDE * CACHE_FLUSH_ITERATIONS];
 #endif
 
 /* Report best guess in value[0] and runner-up in value[1] */
