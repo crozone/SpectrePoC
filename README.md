@@ -67,7 +67,7 @@ If you want to build it manually, make sure to disable all optimisations (aka, d
 
 ## Executing
 
-To run specter with default cache hit threshold of 80, and the secret example string "The Magic Words are Squeamish Ossifrage." as the target, run `./spectre.out` with no command line arguments.
+To run spectre with default cache hit threshold of 80, and the secret example string "The Magic Words are Squeamish Ossifrage." as the target, run `./spectre.out` with no command line arguments.
 
 **Example:** `./spectre.out`
 
