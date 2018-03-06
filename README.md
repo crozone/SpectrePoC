@@ -69,6 +69,24 @@ To build the project without all of the above instructions introduced with SSE2,
 
 `CFLAGS=-DNOSSE2 make`
 
+#### 'Target specific option mismatch' error
+
+Some 32-bit versions of gcc (e.g. the version used in Ubuntu 14.04) may show the following error while compiling the PoC:
+
+```
+/usr/lib/gcc/i686-linux-gnu/5/include/emmintrin.h:1479:1: error:
+  inlining failed in call to always_inline
+`_mm_clflush`: target specific option mismatch
+ _mm_clflush (void const *__A)
+ ^
+```
+
+In this case architecture build flag `-march=native` is required for compilation for the current CPU:
+
+`CFLAGS=-march=native make`
+
+This flag builds the binary specifically for the current CPU and it may crash after copying to another machine.
+
 ### Building it without using the Makefile
 
 If you want to build it manually, make sure to disable all optimisations (aka, don't use -O2), as it will break the program.
