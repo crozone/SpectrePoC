@@ -57,9 +57,17 @@ To build the project without `clflush`, define the NOCLFLUSH cflag:
 
 `CFLAGS=-DNOCLFLUSH make`
 
+#### Multiple cflags
+
 To define multiple cflags, separate each cflag with an escaped space. For example:
 
 `CFLAGS=-DNORDTSCP\ -DNOMFENCE\ -DNOCLFLUSH make`
+
+#### SSE2 instruction set
+
+To build the project without all of the above instructions introduced with SSE2, define NOSSE2 cflag:
+
+`CFLAGS=-DNOSSE2 make`
 
 ### Building it without using the Makefile
 
