@@ -21,6 +21,12 @@
 #include <x86intrin.h> /* for rdtsc, rdtscp, clflush */
 #endif
 
+#ifdef NOSSE2
+#define NORDTSCP
+#define NOMFENCE
+#define NOCLFLUSH
+#endif
+
 /********************************************************************
 Victim code.
 ********************************************************************/
