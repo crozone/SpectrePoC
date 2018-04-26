@@ -1,4 +1,4 @@
-CFLAGS += -std=c99 -O0
+CFLAGS += -std=gnu99 -O0
 
 PROGRAM = spectre.out
 SOURCE  = spectre.c
