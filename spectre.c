@@ -53,6 +53,16 @@ uint8_t temp = 0; /* Used so compiler won’t optimize out victim_function() */
 
 void victim_function(size_t x) {
   if (x < array1_size) {
+#ifdef MITIGATE
+		/*
+		 * According to Intel et al, the best way to mitigate this is to 
+		 * add a serializing instruction after the boundary check to force
+		 * the retirement of previous instructions before proceeding to 
+		 * the read.
+		 * See https://newsroom.intel.com/wp-content/uploads/sites/11/2018/01/Intel-Analysis-of-Speculative-Execution-Side-Channels.pdf
+		 */
+		_mm_lfence();
+#endif
     temp &= array2[array1[x] * 512];
   }
 }

@@ -26,6 +26,16 @@ Building is as easy as:
 
 The output binary is `./spectre.out`.
 
+If you want to build a version with mitigation included, set your `CFLAGS`
+
+`CFLAGS=-DMITIGATION`
+
+in the `Makefile` or build like
+
+`CFLAGS=-DMITIGATION make`
+
+The output binary will still be in `./spectre.out`.
+
 ### Building for older CPUs
 
 Depending on the CPU, certain instructions will need to be disabled in order for the program to run correctly.
