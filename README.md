@@ -26,7 +26,9 @@ Building is as easy as:
 
 The output binary is `./spectre.out`.
 
-If you want to build a version with mitigation included, set your `CFLAGS`
+### Mitigation
+
+If you want to build a version with Intel's lfence mitigation included, set your `CFLAGS`
 
 `CFLAGS=-DMITIGATION`
 
