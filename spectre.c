@@ -59,7 +59,7 @@ uint8_t temp = 0; /* Used so compiler won’t optimize out victim_function() */
 
 void victim_function(size_t x) {
   if (x < array1_size) {
-#ifdef MITIGATE
+#ifdef MITIGATION
 		/*
 		 * According to Intel et al, the best way to mitigate this is to 
 		 * add a serializing instruction after the boundary check to force
@@ -307,7 +307,7 @@ int main(int argc,
   #else
     printf("CLFLUSH_NOT_SUPPORTED ");
   #endif
-  #ifdef MITIGATE
+  #ifdef MITIGATION
     printf("MITIGATION_ENABLED ");
   #else
     printf("MITIGATION_DISABLED ");
