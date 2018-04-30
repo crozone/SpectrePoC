@@ -307,6 +307,12 @@ int main(int argc,
   #else
     printf("CLFLUSH_NOT_SUPPORTED ");
   #endif
+  #ifdef MITIGATE
+    printf("MITIGATION_ENABLED ");
+  #else
+    printf("MITIGATION_DISABLED ");
+  #endif
+
 
   printf("\n");
 
