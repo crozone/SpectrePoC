@@ -57,6 +57,30 @@ char * secret = "The Magic Words are Squeamish Ossifrage.";
 
 uint8_t temp = 0; /* Used so compiler won’t optimize out victim_function() */
 
+#ifdef LINUX_KERNEL_MITIGATION
+/* From https://github.com/torvalds/linux/blob/cb6416592bc2a8b731dabcec0d63cda270764fc6/arch/x86/include/asm/barrier.h#L27 */
+/**
+ * array_index_mask_nospec() - generate a mask that is ~0UL when the
+ * 	bounds check succeeds and 0 otherwise
+ * @index: array element index
+ * @size: number of elements in array
+ *
+ * Returns:
+ *     0 - (index < size)
+ */
+static inline unsigned long array_index_mask_nospec(unsigned long index,
+		unsigned long size)
+{
+	unsigned long mask;
+
+	__asm__ __volatile__ ("cmp %1,%2; sbb %0,%0;"
+			:"=r" (mask)
+			:"g"(size),"r" (index)
+			:"cc");
+	return mask;
+}
+#endif
+
 void victim_function(size_t x) {
   if (x < array1_size) {
 #ifdef MITIGATION
@@ -68,6 +92,9 @@ void victim_function(size_t x) {
 		 * See https://newsroom.intel.com/wp-content/uploads/sites/11/2018/01/Intel-Analysis-of-Speculative-Execution-Side-Channels.pdf
 		 */
 		_mm_lfence();
+#endif
+#ifdef LINUX_KERNEL_MITIGATION
+    x &= array_index_mask_nospec(x, array1_size);
 #endif
     temp &= array2[array1[x] * 512];
   }
@@ -308,11 +335,15 @@ int main(int argc,
     printf("CLFLUSH_NOT_SUPPORTED ");
   #endif
   #ifdef MITIGATION
-    printf("MITIGATION_ENABLED ");
+    printf("INTEL_MITIGATION_ENABLED ");
   #else
-    printf("MITIGATION_DISABLED ");
+    printf("INTEL_MITIGATION_DISABLED ");
   #endif
-
+  #ifdef LINUX_KERNEL_MITIGATION
+    printf("LINUX_KERNEL_MITIGATION_ENABLED ");
+  #else
+    printf("LINUX_KERNEL_MITIGATION_DISABLED ");
+  #endif
 
   printf("\n");
 

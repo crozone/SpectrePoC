@@ -26,7 +26,7 @@ Building is as easy as:
 
 The output binary is `./spectre.out`.
 
-### Mitigation
+### Intel lfence style mitigation
 
 If you want to build a version with Intel's lfence mitigation included, set your `CFLAGS`
 
@@ -35,6 +35,18 @@ If you want to build a version with Intel's lfence mitigation included, set your
 in the `Makefile` or build like
 
 `CFLAGS=-DMITIGATION make`
+
+The output binary will still be in `./spectre.out`.
+
+### Linux kernel style mitigation
+
+If you want to build a version with Linux kernel array_index_mask_nospec() mitigation included, set your `CFLAGS`
+
+`CFLAGS=-DLINUX_KERNEL_MITIGATION`
+
+in the `Makefile` or build like
+
+`CFLAGS=-DLINUX_KERNEL_MITIGATION make`
 
 The output binary will still be in `./spectre.out`.
 
