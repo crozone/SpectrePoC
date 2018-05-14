@@ -19,6 +19,12 @@
 #pragma optimize("gt",on)
 #else
 #include <x86intrin.h> /* for rdtsc, rdtscp, clflush */
+
+/* Automatically detect if SSE2 is not available when SSE is advertized */
+#if defined(__SSE__) && !defined(__SSE2__)
+#define NOSSE2
+#endif
+
 #endif
 
 #ifdef NOSSE2
