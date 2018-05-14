@@ -89,7 +89,7 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
 
 void victim_function(size_t x) {
   if (x < array1_size) {
-#ifdef MITIGATION
+#ifdef INTEL_MITIGATION
 		/*
 		 * According to Intel et al, the best way to mitigate this is to 
 		 * add a serializing instruction after the boundary check to force
@@ -342,7 +342,7 @@ int main(int argc,
   #else
     printf("CLFLUSH_NOT_SUPPORTED ");
   #endif
-  #ifdef MITIGATION
+  #ifdef INTEL_MITIGATION
     printf("INTEL_MITIGATION_ENABLED ");
   #else
     printf("INTEL_MITIGATION_DISABLED ");
