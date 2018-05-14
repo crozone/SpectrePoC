@@ -95,6 +95,9 @@ To build the project without all of the above instructions introduced with SSE2,
 
 `CFLAGS=-DNOSSE2 make`
 
+This flag is automatically enabled if the `__SSE__` flag is present but `__SSE2__` is absent.
+This means `NOSSE2` shouldn't need to be manually specified when compiling on Clang or GCC on non-SSE2 processors.
+
 #### 'Target specific option mismatch' error
 
 Some 32-bit versions of gcc (e.g. the version used in Ubuntu 14.04) may show the following error while compiling the PoC:
