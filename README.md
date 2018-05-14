@@ -149,48 +149,48 @@ The following was output on an Intel(R) Core(TM) i7-8650U CPU, with a cache hit 
 `./spectre.out 20:`
 
 ```
-Version: commit 9337eaa1d5878ac761a4378a406ace99785a573b
+Version: commit 04c47db298920eb4d1b7c1bafcd0017a72d415bc
 Using a cache hit threshold of 20.
-Build: RDTSCP_SUPPORTED MFENCE_SUPPORTED CLFLUSH_SUPPORTED MITIGATION_DISABLED
+Build: RDTSCP_SUPPORTED MFENCE_SUPPORTED CLFLUSH_SUPPORTED INTEL_MITIGATION_DISABLED LINUX_KERNEL_MITIGATION_DISABLED
 Reading 40 bytes:
-Reading at malicious_x = 0xffffffffffdfee88... Unclear: 0x54=’T’ score=865 (second best: 0x00=’?’ score=473)
-Reading at malicious_x = 0xffffffffffdfee89... Success: 0x68=’h’ score=101 (second best: 0x00=’?’ score=48)
-Reading at malicious_x = 0xffffffffffdfee8a... Success: 0x65=’e’ score=47 (second best: 0x00=’?’ score=21)
-Reading at malicious_x = 0xffffffffffdfee8b... Success: 0x20=’ ’ score=729 (second best: 0x00=’?’ score=362)
-Reading at malicious_x = 0xffffffffffdfee8c... Success: 0x4D=’M’ score=2
-Reading at malicious_x = 0xffffffffffdfee8d... Success: 0x61=’a’ score=481 (second best: 0x00=’?’ score=236)
-Reading at malicious_x = 0xffffffffffdfee8e... Success: 0x67=’g’ score=851 (second best: 0x00=’?’ score=423)
-Reading at malicious_x = 0xffffffffffdfee8f... Unclear: 0x69=’i’ score=915 (second best: 0x6A=’j’ score=506)
-Reading at malicious_x = 0xffffffffffdfee90... Success: 0x63=’c’ score=25 (second best: 0x05=’?’ score=10)
-Reading at malicious_x = 0xffffffffffdfee91... Success: 0x20=’ ’ score=65 (second best: 0x00=’?’ score=26)
-Reading at malicious_x = 0xffffffffffdfee92... Success: 0x57=’W’ score=215 (second best: 0x00=’?’ score=105)
-Reading at malicious_x = 0xffffffffffdfee93... Success: 0x6F=’o’ score=95 (second best: 0x05=’?’ score=45)
-Reading at malicious_x = 0xffffffffffdfee94... Success: 0x72=’r’ score=59 (second best: 0x00=’?’ score=27)
-Reading at malicious_x = 0xffffffffffdfee95... Success: 0x64=’d’ score=2
-Reading at malicious_x = 0xffffffffffdfee96... Success: 0x73=’s’ score=209 (second best: 0x05=’?’ score=102)
-Reading at malicious_x = 0xffffffffffdfee97... Success: 0x20=’ ’ score=173 (second best: 0x05=’?’ score=84)
-Reading at malicious_x = 0xffffffffffdfee98... Success: 0x61=’a’ score=83 (second best: 0x62=’b’ score=39)
-Reading at malicious_x = 0xffffffffffdfee99... Unclear: 0x72=’r’ score=802 (second best: 0x05=’?’ score=582)
-Reading at malicious_x = 0xffffffffffdfee9a... Success: 0x65=’e’ score=187 (second best: 0x05=’?’ score=91)
-Reading at malicious_x = 0xffffffffffdfee9b... Success: 0x20=’ ’ score=107 (second best: 0x05=’?’ score=51)
-Reading at malicious_x = 0xffffffffffdfee9c... Success: 0x53=’S’ score=121 (second best: 0x05=’?’ score=58)
-Reading at malicious_x = 0xffffffffffdfee9d... Success: 0x71=’q’ score=19 (second best: 0x05=’?’ score=7)
-Reading at malicious_x = 0xffffffffffdfee9e... Unclear: 0x75=’u’ score=23 (second best: 0x00=’?’ score=13)
-Reading at malicious_x = 0xffffffffffdfee9f... Success: 0x65=’e’ score=39 (second best: 0x05=’?’ score=17)
-Reading at malicious_x = 0xffffffffffdfeea0... Success: 0x61=’a’ score=29 (second best: 0x00=’?’ score=12)
-Reading at malicious_x = 0xffffffffffdfeea1... Success: 0x6D=’m’ score=21 (second best: 0x05=’?’ score=8)
-Reading at malicious_x = 0xffffffffffdfeea2... Success: 0x69=’i’ score=635 (second best: 0x6A=’j’ score=315)
-Reading at malicious_x = 0xffffffffffdfeea3... Success: 0x73=’s’ score=2
-Reading at malicious_x = 0xffffffffffdfeea4... Success: 0x68=’h’ score=459 (second best: 0x00=’?’ score=228)
-Reading at malicious_x = 0xffffffffffdfeea5... Success: 0x20=’ ’ score=23 (second best: 0x05=’?’ score=9)
-Reading at malicious_x = 0xffffffffffdfeea6... Success: 0x4F=’O’ score=95 (second best: 0x05=’?’ score=45)
-Reading at malicious_x = 0xffffffffffdfeea7... Success: 0x73=’s’ score=145 (second best: 0x00=’?’ score=70)
-Reading at malicious_x = 0xffffffffffdfeea8... Success: 0x73=’s’ score=337 (second best: 0x05=’?’ score=166)
-Reading at malicious_x = 0xffffffffffdfeea9... Success: 0x69=’i’ score=191 (second best: 0x00=’?’ score=93)
-Reading at malicious_x = 0xffffffffffdfeeaa... Success: 0x66=’f’ score=2
-Reading at malicious_x = 0xffffffffffdfeeab... Success: 0x72=’r’ score=91 (second best: 0x00=’?’ score=43)
-Reading at malicious_x = 0xffffffffffdfeeac... Success: 0x61=’a’ score=19 (second best: 0x05=’?’ score=7)
-Reading at malicious_x = 0xffffffffffdfeead... Success: 0x67=’g’ score=91 (second best: 0x00=’?’ score=44)
-Reading at malicious_x = 0xffffffffffdfeeae... Success: 0x65=’e’ score=93 (second best: 0x05=’?’ score=44)
-Reading at malicious_x = 0xffffffffffdfeeaf... Success: 0x2E=’.’ score=121 (second best: 0x00=’?’ score=58)
+Reading at malicious_x = 0xffffffffffdfeeb8... Success: 0x54=’T’ score=187 (second best: 0x00=’?’ score=92)
+Reading at malicious_x = 0xffffffffffdfeeb9... Unclear: 0x68=’h’ score=967 (second best: 0x00=’?’ score=486)
+Reading at malicious_x = 0xffffffffffdfeeba... Unclear: 0x65=’e’ score=985 (second best: 0x00=’?’ score=566)
+Reading at malicious_x = 0xffffffffffdfeebb... Unclear: 0x20=’ ’ score=965 (second best: 0x00=’?’ score=659)
+Reading at malicious_x = 0xffffffffffdfeebc... Unclear: 0x4D=’M’ score=978 (second best: 0x00=’?’ score=700)
+Reading at malicious_x = 0xffffffffffdfeebd... Unclear: 0x61=’a’ score=967 (second best: 0x00=’?’ score=654)
+Reading at malicious_x = 0xffffffffffdfeebe... Success: 0x67=’g’ score=705 (second best: 0x00=’?’ score=345)
+Reading at malicious_x = 0xffffffffffdfeebf... Unclear: 0x69=’i’ score=974 (second best: 0x6A=’j’ score=768)
+Reading at malicious_x = 0xffffffffffdfeec0... Unclear: 0x63=’c’ score=615 (second best: 0x00=’?’ score=310)
+Reading at malicious_x = 0xffffffffffdfeec1... Success: 0x20=’ ’ score=2
+Reading at malicious_x = 0xffffffffffdfeec2... Success: 0x57=’W’ score=13 (second best: 0x00=’?’ score=3)
+Reading at malicious_x = 0xffffffffffdfeec3... Success: 0x6F=’o’ score=17 (second best: 0x00=’?’ score=1)
+Reading at malicious_x = 0xffffffffffdfeec4... Success: 0x72=’r’ score=11 (second best: 0x00=’?’ score=4)
+Reading at malicious_x = 0xffffffffffdfeec5... Unclear: 0x64=’d’ score=7 (second best: 0x00=’?’ score=6)
+Reading at malicious_x = 0xffffffffffdfeec6... Success: 0x73=’s’ score=31 (second best: 0x00=’?’ score=13)
+Reading at malicious_x = 0xffffffffffdfeec7... Unclear: 0x20=’ ’ score=7 (second best: 0x00=’?’ score=6)
+Reading at malicious_x = 0xffffffffffdfeec8... Success: 0x61=’a’ score=43 (second best: 0x00=’?’ score=20)
+Reading at malicious_x = 0xffffffffffdfeec9... Success: 0x72=’r’ score=189 (second best: 0x00=’?’ score=91)
+Reading at malicious_x = 0xffffffffffdfeeca... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfeecb... Unclear: 0x20=’ ’ score=7 (second best: 0x00=’?’ score=6)
+Reading at malicious_x = 0xffffffffffdfeecc... Unclear: 0x53=’S’ score=151 (second best: 0x00=’?’ score=78)
+Reading at malicious_x = 0xffffffffffdfeecd... Success: 0x71=’q’ score=57 (second best: 0x00=’?’ score=26)
+Reading at malicious_x = 0xffffffffffdfeece... Success: 0x00=’?’ score=5
+Reading at malicious_x = 0xffffffffffdfeecf... Success: 0x65=’e’ score=33 (second best: 0x00=’?’ score=14)
+Reading at malicious_x = 0xffffffffffdfeed0... Success: 0x61=’a’ score=115 (second best: 0x62=’b’ score=55)
+Reading at malicious_x = 0xffffffffffdfeed1... Unclear: 0x6D=’m’ score=21 (second best: 0x00=’?’ score=15)
+Reading at malicious_x = 0xffffffffffdfeed2... Unclear: 0x69=’i’ score=961 (second best: 0x6A=’j’ score=593)
+Reading at malicious_x = 0xffffffffffdfeed3... Success: 0x73=’s’ score=37 (second best: 0x00=’?’ score=18)
+Reading at malicious_x = 0xffffffffffdfeed4... Success: 0x68=’h’ score=253 (second best: 0x00=’?’ score=122)
+Reading at malicious_x = 0xffffffffffdfeed5... Unclear: 0x20=’ ’ score=9 (second best: 0x00=’?’ score=5)
+Reading at malicious_x = 0xffffffffffdfeed6... Success: 0x4F=’O’ score=315 (second best: 0x00=’?’ score=156)
+Reading at malicious_x = 0xffffffffffdfeed7... Success: 0x73=’s’ score=21 (second best: 0x00=’?’ score=8)
+Reading at malicious_x = 0xffffffffffdfeed8... Success: 0x73=’s’ score=27 (second best: 0x00=’?’ score=9)
+Reading at malicious_x = 0xffffffffffdfeed9... Success: 0x69=’i’ score=51 (second best: 0x00=’?’ score=16)
+Reading at malicious_x = 0xffffffffffdfeeda... Success: 0x66=’f’ score=2
+Reading at malicious_x = 0xffffffffffdfeedb... Unclear: 0x72=’r’ score=53 (second best: 0x00=’?’ score=31)
+Reading at malicious_x = 0xffffffffffdfeedc... Success: 0x61=’a’ score=7 (second best: 0x00=’?’ score=3)
+Reading at malicious_x = 0xffffffffffdfeedd... Success: 0x67=’g’ score=2
+Reading at malicious_x = 0xffffffffffdfeede... Success: 0x65=’e’ score=2
+Reading at malicious_x = 0xffffffffffdfeedf... Success: 0x2E=’.’ score=35 (second best: 0x00=’?’ score=8)
 ```
