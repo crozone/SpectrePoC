@@ -32,7 +32,7 @@ Victim code.
 ********************************************************************/
 unsigned int array1_size = 16;
 uint8_t unused1[64];
-uint8_t array1[160] = {
+uint8_t array1[16] = {
   1,
   2,
   3,
