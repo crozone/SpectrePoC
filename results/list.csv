@@ -1,0 +1,7 @@
+vendor_id,cpu family,model,model name,stepping,microcode,cpu MHz,cache size KB,vulnerability,cache threshold,git hash
+AuthenticAMD,22,48,AMD GX-412TC SOC,1,0x7030105,600.000,2048,VULNERABLE,300
+AuthenticAMD,23,1,AMD Ryzen 5 1600 Six-Core Processor,1,0x8001126,3200.000,512,VULNERABLE,80
+AuthenticAMD,16,4,AMD Athlon(tm) II X4 555 Processor,3,0x10000c8,1500.000,512,VULNERABLE,80
+GenuineIntel,6,158,Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz,9,0xffffffff,4200.000,256,VULNERABLE,80
+GenuineIntel,6,158,Intel(R) Core(TM) i3-8350K CPU @ 4.00GHz,11,0x72,4000.000,8192,VULNERABLE,80
+GenuineIntel,6,60,Intel(R) Core(TM) i5-4670K CPU @ 3.40GHz,3,0x19,902.062,6144,VULNERABLE,80
