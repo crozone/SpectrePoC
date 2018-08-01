@@ -19,13 +19,20 @@
 #pragma optimize("gt",on)
 #else
 #include <x86intrin.h> /* for rdtsc, rdtscp, clflush */
+#endif /* ifdef _MSC_VER */
 
 /* Automatically detect if SSE2 is not available when SSE is advertized */
+#ifdef _MSC_VER
+/* MSC */
+#if _M_IX86_FP==1
+#define NOSSE2
+#endif
+#else
+/* Not MSC */
 #if defined(__SSE__) && !defined(__SSE2__)
 #define NOSSE2
 #endif
-
-#endif
+#endif /* ifdef _MSC_VER */
 
 #ifdef NOSSE2
 #define NORDTSCP
