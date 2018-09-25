@@ -95,8 +95,11 @@ To build the project without all of the above instructions introduced with SSE2,
 
 `CFLAGS=-DNOSSE2 make`
 
-This flag is automatically enabled if the `__SSE__` flag is present but `__SSE2__` is absent.
+`NOSSE2` is automatically enabled if the `__SSE__` flag is present but `__SSE2__` is absent.
 This means `NOSSE2` shouldn't need to be manually specified when compiling on Clang or GCC on non-SSE2 processors.
+
+On MSC, `NOSSE2` is automatically enabled if the `_M_IX86_FP` flag is set to `1` (indicating SSE support, but no SSE2 support).
+MSC will set this by default for all x86 processors.
 
 #### 'Target specific option mismatch' error
 
