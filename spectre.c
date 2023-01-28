@@ -268,11 +268,11 @@ void readMemoryByte(int cache_hit_threshold, size_t malicious_x, uint8_t value[2
     if (results[j] >= (2 * results[k] + 5) || (results[j] == 2 && results[k] == 0))
       break; /* Clear success if best is > 2*runner-up + 5 or 2/0) */
   }
-  results[0] ^= junk; /* use junk so code above won’t get optimized out*/
   value[0] = (uint8_t) j;
   score[0] = results[j];
   value[1] = (uint8_t) k;
   score[1] = results[k];
+  results[0] ^= junk; /* use junk so code above won’t get optimized out*/
 }
 
 /*
